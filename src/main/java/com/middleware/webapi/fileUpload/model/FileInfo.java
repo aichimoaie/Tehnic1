@@ -24,4 +24,9 @@ public class FileInfo {
 	  public void setUrl(String url) {
 	    this.url = url;
 	  }
+	  
+	  public String toString() {
+		  return this.name + this.url;
+	  }
+	  
 	}

@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.middleware.webapi.publisher.model.Employee;
+
+import com.middleware.webapi.fileUpload.model.FileInfo;
 
 @Service
 public class RabbitMQSender {
@@ -17,17 +18,16 @@ public class RabbitMQSender {
 		this.rabbitTemplate= amqp;
 	}
 	
-	
 	@Value("${javainuse.rabbitmq.exchange}")
 	private String exchange;
 	
 	@Value("${javainuse.rabbitmq.routingkey}")
 	private String routingkey;	
 	
-	public void send(Employee company) {
-		rabbitTemplate.convertAndSend(exchange, routingkey, company);
-		System.out.println("Send msg = " + company.toString());
-	    
+	
+	public void send(FileInfo file) {
+		rabbitTemplate.convertAndSend(exchange, routingkey, file);
+		System.out.println("Send msg = " + file);
 	}
 }
 

@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.middleware.webapi.fileUpload.model.FileInfo;
 import com.middleware.webapi.fileUpload.messages.ResponseMessage;
 import com.middleware.webapi.fileUpload.services.FilesStorageService;
+import com.middleware.webapi.publisher.service.RabbitMQSender;
 
 @Controller
 @CrossOrigin("http://localhost:8081")
@@ -28,14 +29,19 @@ public class FilesController {
 
   @Autowired
   FilesStorageService storageService;
+	@Autowired
+	RabbitMQSender rabbitMQSender;
 
   @PostMapping("/upload")
   public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
     String message = "";
     try {
       storageService.save(file);
-
       message = "Uploaded the file successfully: " + file.getOriginalFilename();
+      
+      FileInfo info=new FileInfo(file.getOriginalFilename(),file.getOriginalFilename());
+      rabbitMQSender.send(info);
+      
       return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
     } catch (Exception e) {
       message = "Could not upload the file: " + file.getOriginalFilename() + "!";

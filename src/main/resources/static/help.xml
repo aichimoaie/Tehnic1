@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<tutorials>
+    <tutorial tutId="01" type="XML">
+        <author>Still</author>
+        <date>04/02/2015</date>
+        <description>XML Binding with Jaxb</description>
+        <title>XML with Jaxb</title>
+    </tutorial>
+    <tutorial tutId="02" type="XML">
+        <author>Andi</author>
+        <date>2020-08-12T15:29:33.000</date>
+        <description>XML Binding with Jaxb</description>
+        <title>XML with Jaxb</title>
+    </tutorial>
+    <tutorial tutId="03" type="dollar">
+        <author>Andi</author>
+        <date>5</date>
+        <description>XML Binding with Jaxb</description>
+        <title>XML with Jaxb</title>
+    </tutorial>
+    <tutorial tutId="04" type="euro">
+        <author>David</author>
+        <date>2012-07-12T15:29:33.000</date>
+        <description>XML Binding with Jaxb</description>
+        <title>XML with Jaxb</title>
+    </tutorial>
+    <tutorial tutId="05" type="imature">
+        <author>Bogdan</author>
+        <date>2016-08-12T15:29:33.000</date>
+        <description>Starting AC</description>
+        <title>Frighten</title>
+    </tutorial>
+    <tutorial tutId="06" type="still stup&amp;scarred">
+        <author>David</author>
+        <date>2017-08-12T15:29:33.000</date>
+        <description>Starting IZAB</description>
+        <title>Crazy</title>
+    </tutorial>
+    <tutorial tutId="07" type="still long way to go">
+        <author>Bogdan</author>
+        <date>2018-08-12T15:29:33.000</date>
+        <description>Starting IZAB</description>
+        <title>Crazy</title>
+    </tutorial>
+    <tutorial tutId="08" type="feeling better">
+        <author>David</author>
+        <date>2019-08-12T15:29:33.000</date>
+        <description>Starting IZAB</description>
+        <title>Crazy</title>
+    </tutorial>
+</tutorials>
