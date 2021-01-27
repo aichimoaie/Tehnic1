@@ -18,10 +18,10 @@ public class RabbitMQSender {
 		this.rabbitTemplate= amqp;
 	}
 	
-	@Value("${javainuse.rabbitmq.exchange}")
+	@Value("${rabbitmq.exchange}")
 	private String exchange;
 	
-	@Value("${javainuse.rabbitmq.routingkey}")
+	@Value("${rabbitmq.routingkey}")
 	private String routingkey;	
 	
 	

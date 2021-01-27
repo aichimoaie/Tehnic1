@@ -14,7 +14,6 @@ public class Products {
 		return product;
 	}
 
-
 	public void setProduct(List<Product> product) {
 		this.product = product;
 	}

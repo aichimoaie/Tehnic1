@@ -1,15 +1,19 @@
 package com.middleware.listener;
 
 import com.rabbitmq.client.Channel;
+
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
+import java.io.File;
+
+import com.middleware.listener.services.*;
 
 
 public class SimpleListener {
 
-    private final static String QUEUE_NAME = "javainuse.queue";
+    private final static String QUEUE_NAME = "orders.queue";
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
@@ -25,7 +29,11 @@ public class SimpleListener {
 
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), "UTF-8");
-            System.out.println(" [x] Received '" + message + "'");
+            
+            String[] fileName = message.split("\"");
+    		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName[3]);
+    		JaxbParser jax = new JaxbParser(a);
+    		jax.splitOrderFile();
         };
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
     }

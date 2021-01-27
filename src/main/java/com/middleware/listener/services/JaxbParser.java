@@ -27,7 +27,6 @@ public class JaxbParser {
 		
 		String supplier=product.getSuppl();
 		product.setSuppl(null);
-		//product.setOrderID();
 		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+supplier+fileOrderID+".xml");
 		try {
 			if(!a.exists()) {
@@ -57,7 +56,6 @@ public class JaxbParser {
 	}
 
 	public Orders getFullOrdersDocument() {
-		//File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+".xml");
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Orders.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -72,8 +70,7 @@ public class JaxbParser {
 
 
 	private Products getFullVendorDocument(String fileName , String fileOrderID) {
-		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+ fileOrderID+ ".xml");
-		//if(!a.exists()) 			
+		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+ fileOrderID+ ".xml");		
 
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
@@ -90,7 +87,6 @@ public class JaxbParser {
 
 		String supplier = product.getSuppl();
 		product.setSuppl(null);
-		//product.setOrderID( );
 		
 		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+supplier+ fileOrderID +".xml");
 		Products products=getFullVendorDocument(supplier, fileOrderID);
@@ -131,35 +127,34 @@ public class JaxbParser {
 		
 		Collections.sort(orders, Comparator.comparing(Order::getCreatedOn).reversed());
 				
-		
+		//Store vendor files that are already created for a particular orders input file
 		ArrayList<String> vendors = new ArrayList<String>();
 
 		
 		for (int i = 0; i < orders.size(); i++) {
 
-			//System.out.println(orders.get(i).getCreated());
-			//System.out.println(orders.get(i).getID());
-
 			List<Product> product = orders.get(i).getProduct();
 			for (int j = 0; j < product.size(); j++) {
-				System.out.println(product.get(j));
+				//System.out.println(product.get(j));
 
 				Product p = new Product();
 				try {
 					p = (Product) product.get(j).clone();
+					p.setOrderID(orders.get(i).getID());
 				
 				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
 				
 				if(vendors.contains(product.get(j).getSuppl())) {
-					//should add to existin
+					//insert into existing vendor file
 					insertInVendorDocument(p,fileOrderID);
 
 				}
 				else {
-					//should create new
-					createNewVendorDocument(p,fileOrderID);	
+					//create new vendor file and insert into it
+					createNewVendorDocument(p,fileOrderID);
+	
 					vendors.add(product.get(j).getSuppl());
 				}
 
