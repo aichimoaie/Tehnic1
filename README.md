@@ -1,5 +1,5 @@
 # Tehnic1
-
+Requirements are met.
 Working for the first time with Spring and JABX so i would be glad  to get additional recomandations from you .
 <br>
 JAVA 1.8 
