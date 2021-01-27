@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -22,9 +23,12 @@ public class JaxbParser {
 	}
 
 
-	public void createNewVendorDocument(Product product, String fileName) {
-
-		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+".xml");
+	public void createNewVendorDocument(Product product,String fileOrderID) {
+		
+		String supplier=product.getSuppl();
+		product.setSuppl(null);
+		//product.setOrderID();
+		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+supplier+fileOrderID+".xml");
 		try {
 			if(!a.exists()) {
 				a.createNewFile();
@@ -67,8 +71,8 @@ public class JaxbParser {
 
 
 
-	private Products getFullVendorDocument(String fileName) {
-		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+".xml");
+	private Products getFullVendorDocument(String fileName , String fileOrderID) {
+		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+ fileOrderID+ ".xml");
 		//if(!a.exists()) 			
 
 		try {
@@ -82,11 +86,14 @@ public class JaxbParser {
 		}
 	}
 
-	public void insertInVendorDocument(Product product, String fileName) {
+	public void insertInVendorDocument(Product product, String fileOrderID) {
 
-		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+".xml");
-
-		Products products=getFullVendorDocument(fileName);
+		String supplier = product.getSuppl();
+		product.setSuppl(null);
+		//product.setOrderID( );
+		
+		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+supplier+ fileOrderID +".xml");
+		Products products=getFullVendorDocument(supplier, fileOrderID);
 
 		products.getProduct().add(product);
 
@@ -106,20 +113,27 @@ public class JaxbParser {
 
 
 	public void  splitOrderFile() {
+		
+		//researsch on regex and refactor to obtain the id part of inputFile name
+		String[] part = this.getFile().getAbsolutePath().split("(?<=\\D)(?=\\d)");
+		String[] subpart = part[1].split("\\.");
+		String fileOrderID = subpart[0];
 
-		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/orders23.xml");
-
-		JaxbParser jax = new JaxbParser(a);
-
-		List<Order> orders = jax.getFullOrdersDocument().getOrder();
-		//sort desc
-		Collections.reverse(orders);
-		//Collections.sort(orders);
+		List<Order> orders = getFullOrdersDocument().getOrder();
+		
+		
+		//here is needing for researsch and refactor but requirements are met; the products ar listed desc by date and price
+		//i may use ".thenComparing(Order::getProduct().getPrice()));" but don't work 
+		for (Order subList : orders) {
+			List<Product> products = subList.getProduct();
+			Collections.sort(products, Comparator.comparing(Product::getPrice).reversed());
+		}
+		
+		Collections.sort(orders, Comparator.comparing(Order::getCreatedOn).reversed());
+				
 		
 		ArrayList<String> vendors = new ArrayList<String>();
 
-		System.out.println("==============> Loop through orders.");
-		
 		
 		for (int i = 0; i < orders.size(); i++) {
 
@@ -128,33 +142,24 @@ public class JaxbParser {
 
 			List<Product> product = orders.get(i).getProduct();
 			for (int j = 0; j < product.size(); j++) {
-				//				System.out.println("descr: " + product.get(j).getDescription());
-				//				System.out.println("currency: " +product.get(j).getCurrency());
-				//				System.out.println("gtin: " +product.get(j).getGtin());
-				//				System.out.println("price : " +product.get(j).getPrice());
-				//				System.out.println("suppl: " +product.get(j).getSuppl());
+				System.out.println(product.get(j));
 
+				Product p = new Product();
+				try {
+					p = (Product) product.get(j).clone();
+				
+				} catch (CloneNotSupportedException e) {
+					e.printStackTrace();
+				}
+				
 				if(vendors.contains(product.get(j).getSuppl())) {
 					//should add to existin
-					Product p;
-					try {
-						p = (Product) product.get(j).clone();
-						insertInVendorDocument(p, p.getSuppl());
-					} catch (CloneNotSupportedException e) {
-						e.printStackTrace();
-					}
+					insertInVendorDocument(p,fileOrderID);
 
 				}
 				else {
 					//should create new
-					Product p;
-					try {
-						p = (Product) product.get(j).clone();
-						createNewVendorDocument(p, p.getSuppl());
-					} catch (CloneNotSupportedException e) {
-						e.printStackTrace();
-					}
-					
+					createNewVendorDocument(p,fileOrderID);	
 					vendors.add(product.get(j).getSuppl());
 				}
 

@@ -8,14 +8,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
-
-
 public class Order implements  Comparable<Order>{
 	private String created;
 	private String ID;
-	
+
 	private List<Product> product;
-	
+
 	@XmlElement(name="product")	
 	public List<Product> getProduct() {
 		return product;
@@ -41,22 +39,18 @@ public class Order implements  Comparable<Order>{
 	public void setID(String id_product) {
 		this.ID = id_product;
 	}
-	
 
-	  public Date getCreatedOn() {
-	    return Util.convertStringToTimestamp(created);
-	  }
 
-//	  public void setCreatedOn(Date createdOn) {
-//	    this.created = createdOn;
-//	  }
-
-	  @Override
-	  public int compareTo(Order o) {
-	    if (getCreatedOn() == null || o.getCreatedOn() == null) {
-	      return 0;
-	    }
-	    return getCreatedOn().compareTo(o.getCreatedOn());
-	  }
+	public Date getCreatedOn() {
+		return Util.convertStringToTimestamp(created);
+	}
+	//USELESS , FOUND NEW SOLUTION FROM JAVA 8 WITH LAMBDA FUNCTIONS BUT
+	@Override
+	public int compareTo(Order o) {
+		if (getCreatedOn() == null || o.getCreatedOn() == null) {
+			return 0;
+		}
+		return getCreatedOn().compareTo(o.getCreatedOn());
+	}
 
 }

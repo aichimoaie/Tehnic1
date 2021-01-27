@@ -12,6 +12,19 @@ public class Product implements Cloneable {
 	//private String price;
 	private String supplier;
 	private Price price;
+	
+	
+	
+	public String getOrderID() {
+		return orderID;
+	}
+
+
+	public void setOrderID(String orderID) {
+		this.orderID = orderID;
+	}
+
+	private String orderID;
 
 
 
@@ -57,6 +70,13 @@ public class Product implements Cloneable {
 	public void setSuppl(String suppl) {
 		this.supplier = suppl;
 	}
+	
+	@Override
+	public String toString() {
+		return "Product [description=" + description + ", gtin=" + gtin + ", supplier=" + supplier + ", orderID="
+				+ orderID + ", getPrice()=" + getPrice() + ", getCurrency()=" + getCurrency() + "]";
+	}
+
 
 	public Object clone() throws
 	CloneNotSupportedException 
