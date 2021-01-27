@@ -1,11 +1,12 @@
 # Tehnic1
 
 Working for the first time with Spring and JABX so i would be glad  to get additional recomandations from you .
+<br>
 JAVA 1.8 
 SPRING FRAMEWORK
 RABITMQ SERVER
 JABX
-No additional library was used, I would need a gson parser, but I managed to do with the split function .
+No additional library were used, I would need a gson parser, but I managed to do with the split function .
 
 
 
