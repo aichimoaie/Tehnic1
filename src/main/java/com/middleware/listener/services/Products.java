@@ -15,7 +15,7 @@ public class Products {
 		return product;
 	}
 
-	@XmlElement
+
 	public void setProduct(List<Product> product) {
 		this.product = product;
 	}

@@ -3,6 +3,7 @@ package com.middleware.listener.services;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -20,58 +21,6 @@ public class JaxbParser {
 		this.file = file;
 	}
 
-
-	private Tutorials getFullDocument() {
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Tutorials.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			Tutorials tutorials = (Tutorials) jaxbUnmarshaller.unmarshal(this.getFile());
-			return tutorials;
-		} catch (JAXBException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-
-
-	public void createNewDocument(Tutorial tutorial) {
-		Tutorials tutorials = new Tutorials();
-		tutorials.setTutorial(new ArrayList<Tutorial>());
-		tutorials.getTutorial().add(tutorial);
-
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Tutorials.class);
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-			jaxbMarshaller.marshal(tutorials, file);
-
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public void insertInDocument(Tutorial tutorial) {
-		Tutorials tutorials =getFullDocument();
-
-		tutorials.getTutorial().add(tutorial);
-
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Tutorials.class);
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-			jaxbMarshaller.marshal(tutorials, file);
-
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		}
-
-	}
 
 	public void createNewVendorDocument(Product product, String fileName) {
 
@@ -102,15 +51,13 @@ public class JaxbParser {
 		}
 
 	}
-	
-	public Orders getFullOrdersDocument(String fileName) {
-		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+".xml");
-			//if(!a.exists()) 			
 
+	public Orders getFullOrdersDocument() {
+		//File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+".xml");
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Orders.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			Orders orders = (Orders) jaxbUnmarshaller.unmarshal(a);
+			Orders orders = (Orders) jaxbUnmarshaller.unmarshal(getFile());
 			return orders;
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -118,11 +65,11 @@ public class JaxbParser {
 		}
 	}
 
-	
+
 
 	private Products getFullVendorDocument(String fileName) {
 		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+".xml");
-			//if(!a.exists()) 			
+		//if(!a.exists()) 			
 
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Products.class);
@@ -136,10 +83,10 @@ public class JaxbParser {
 	}
 
 	public void insertInVendorDocument(Product product, String fileName) {
-		
+
 		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/"+fileName+".xml");
-		
-		Products products =getFullVendorDocument(fileName);
+
+		Products products=getFullVendorDocument(fileName);
 
 		products.getProduct().add(product);
 
@@ -158,46 +105,62 @@ public class JaxbParser {
 	}
 
 
+	public void  splitOrderFile() {
 
+		File a = new File("/home/bogdan/Documents/Bucharest/webapi/src/main/resources/static/orders23.xml");
 
+		JaxbParser jax = new JaxbParser(a);
 
-
-	public void  SimpleForloop() {
-		List<Tutorial> tutorials =getFullDocument().getTutorial();
-
+		List<Order> orders = jax.getFullOrdersDocument().getOrder();
+		//sort desc
+		Collections.reverse(orders);
+		//Collections.sort(orders);
+		
 		ArrayList<String> vendors = new ArrayList<String>();
-		// there also may add an arraylist for dates and sort and then reloop
-		System.out.println("==============> 1. Simple For loop Example.");
-		for (int i = 0; i < tutorials.size(); i++) {
-			//			System.out.println(tutorials.get(i));
-			//			System.out.println(tutorials.get(i).getTutId());
-			//			System.out.println(tutorials.get(i).getType());
 
-			if(vendors.contains(tutorials.get(i).getAuthor())) {
-				//Shouyd add to existin
-				Product p = new Product();
-				p.setDescription(tutorials.get(i).getDescription());
-				p.setCur(tutorials.get(i).getType());
-				p.setGtin(tutorials.get(i).getTutId());
-				p.setSuppl(tutorials.get(i).getTitle());
-				p.setPrice(tutorials.get(i).getDate());
-				
-				insertInVendorDocument(p,tutorials.get(i).getAuthor());
-			
-			}
-			else {
-				//should create new
-				Product p = new Product();
-				p.setDescription(tutorials.get(i).getDescription());
-				p.setCur(tutorials.get(i).getType());
-				p.setGtin(tutorials.get(i).getTutId());
-				p.setSuppl(tutorials.get(i).getTitle());
-				p.setPrice(tutorials.get(i).getDate());
-				
-				createNewVendorDocument(p,tutorials.get(i).getAuthor());
-				vendors.add(tutorials.get(i).getAuthor());
+		System.out.println("==============> Loop through orders.");
+		
+		
+		for (int i = 0; i < orders.size(); i++) {
+
+			//System.out.println(orders.get(i).getCreated());
+			//System.out.println(orders.get(i).getID());
+
+			List<Product> product = orders.get(i).getProduct();
+			for (int j = 0; j < product.size(); j++) {
+				//				System.out.println("descr: " + product.get(j).getDescription());
+				//				System.out.println("currency: " +product.get(j).getCurrency());
+				//				System.out.println("gtin: " +product.get(j).getGtin());
+				//				System.out.println("price : " +product.get(j).getPrice());
+				//				System.out.println("suppl: " +product.get(j).getSuppl());
+
+				if(vendors.contains(product.get(j).getSuppl())) {
+					//should add to existin
+					Product p;
+					try {
+						p = (Product) product.get(j).clone();
+						insertInVendorDocument(p, p.getSuppl());
+					} catch (CloneNotSupportedException e) {
+						e.printStackTrace();
+					}
+
+				}
+				else {
+					//should create new
+					Product p;
+					try {
+						p = (Product) product.get(j).clone();
+						createNewVendorDocument(p, p.getSuppl());
+					} catch (CloneNotSupportedException e) {
+						e.printStackTrace();
+					}
+					
+					vendors.add(product.get(j).getSuppl());
+				}
+
 			}
 		}
+
 	}
 
 

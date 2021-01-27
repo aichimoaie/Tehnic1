@@ -1,33 +1,17 @@
 package com.middleware.listener.services;
+import javax.xml.bind.annotation.*;
 
 
 
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-
-public class Product {
-
-
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Product implements Cloneable {
 
 	private String description;
 	private String gtin;
-	private String price;
-	
-	
-	public String getCur() {
-		return cur;
-	}
-
-	@XmlAttribute(name= "currency")
-	public void setCur(String cur) {
-		this.cur = cur;
-	}
-
-	private String cur;
-	private String suppl;
+	//private String price;
+	private String supplier;
+	private Price price;
 
 
 
@@ -35,7 +19,7 @@ public class Product {
 		return description;
 	}
 
-	@XmlElement
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -44,29 +28,40 @@ public class Product {
 		return gtin;
 	}
 
-	@XmlElement
 	public void setGtin(String gtin) {
 		this.gtin = gtin;
 	}
 
 	public String getPrice() {
-		return price;
+		return price.getValue();
 	}
 
-	@XmlElement(name="price")
+
 	public void setPrice(String price) {
-		this.price = price;
+		this.price.setValue(price);
+	}
+
+	public String getCurrency() {
+		return price.getCurrency();
+	}
+
+
+	public void setCurrency(String currency) {
+		this.price.setCurrency(currency);
 	}
 
 	public String getSuppl() {
-		return suppl;
+		return supplier;
 	}
 
-	@XmlElement(name="supplier")
 	public void setSuppl(String suppl) {
-		this.suppl = suppl;
+		this.supplier = suppl;
 	}
 
-
+	public Object clone() throws
+	CloneNotSupportedException 
+	{ 
+		return super.clone(); 
+	} 
 
 }
