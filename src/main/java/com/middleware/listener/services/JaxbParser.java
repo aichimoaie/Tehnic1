@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -109,15 +111,21 @@ public class JaxbParser {
 
 
 	public void  splitOrderFile() {
-		
-		//researsch on regex and refactor to obtain the id part of inputFile name
-		String[] part = this.getFile().getAbsolutePath().split("(?<=\\D)(?=\\d)");
-		String[] subpart = part[1].split("\\.");
-		String fileOrderID = subpart[0];
 
+		 Pattern pattern = Pattern.compile("\\/([a-z]*)(\\d*)\\.", Pattern.CASE_INSENSITIVE);
+		 Matcher matcher = pattern.matcher(this.getFile().getAbsolutePath());
+		 if(!matcher.find()) {
+			 //[Refactor]
+			 //the input file name is not correctly formatted
+			 //should insert in some sort of errpr logfile or anounce the admin
+			 
+		 }
+		 String fileOrderID = matcher.group(2);
+		
+		
 		List<Order> orders = getFullOrdersDocument().getOrder();
 		
-		
+		//[Refactor]
 		//here is needing for researsch and refactor but requirements are met; the products ar listed desc by date and price
 		//i may use ".thenComparing(Order::getProduct().getPrice()));" but don't work 
 		for (Order subList : orders) {

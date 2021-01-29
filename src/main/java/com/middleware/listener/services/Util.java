@@ -6,8 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class Util {
-
-	//needs refactoring 
+	//[Refactor] 
 	public static Date convertStringToTimestamp(String strDate) {
 
 		DateTimeFormatter formatter= DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSS");
