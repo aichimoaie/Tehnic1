@@ -10,8 +10,6 @@ RABITMQ SERVER
 <br>
 JABX
 <br>
-No additional library were used, I would need a gson parser, but I managed to do with the split function .
-<br>
 
 
 Description :
@@ -29,6 +27,4 @@ scheduler, response or all it's FEATURES.
 <br>
 Console Application: Namec com.middleware.Listener.SimpleListener.java i thought if keeping simple will do it job. So the connection to RabbitMQ is made with different libs (instead the ones offered by spring framewor) . Here things are simple, waiting for a message on queue and then process the input file according to the requirements.
 <br>
-Drawbacks : I did not implement the post to the vendors servers because still have to do some works and rather there should be made some refactorings and some recomandations from you.
 
-Tested with postman. 
